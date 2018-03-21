@@ -41,17 +41,6 @@ nospoof = []
 nospoofto = []
 victims = []
 
-LOGREQFILE = "dnslog.txt"
-LOGSNIFFFILE = "snifflog.txt"
-LOGALERTFILE = "dnsalert.txt"
-RESOLVCONF = "resolv.conf"
-
-victim_file = "victims.cfg"
-nospoof_file = "nospoof.cfg"
-nospoofto_file = "nospoofto.cfg"
-specific_file = "spoof.cfg"
-dominios_file = "domains.cfg"
-
 parser = argparse.ArgumentParser()
 parser.add_argument("-N", "--noforward", help="DNS Fowarding OFF (default ON)", action="store_true")
 parser.add_argument("-i", "--interface", help="Interface to use", default="eth0")
@@ -60,8 +49,23 @@ parser.add_argument("-d", "--ip2", help="Second IP to add at the response", defa
 parser.add_argument("-I", "--ips", help="List of IPs to add after ip1,ip2 separated with commas", default=None)
 parser.add_argument("-S", "--silent", help="Silent mode", action="store_true")
 parser.add_argument("-A", "--adminIP", help="Administrator IP for no filtering", default="192.168.0.1")
+parser.add_argument("-p", "--directory", help="Use this option to specify the directory for the config files", default="")
 
 args = parser.parse_args()
+
+DIR_PATH = args.directory
+
+LOGREQFILE = DIR_PATH + "dnslog.txt"
+LOGSNIFFFILE = DIR_PATH + "snifflog.txt"
+LOGALERTFILE = DIR_PATH + "dnsalert.txt"
+RESOLVCONF = DIR_PATH + "resolv.conf"
+
+victim_file = DIR_PATH + "victims.cfg"
+nospoof_file = DIR_PATH + "nospoof.cfg"
+nospoofto_file = DIR_PATH + "nospoofto.cfg"
+specific_file = DIR_PATH + "spoof.cfg"
+dominios_file = DIR_PATH + "domains.cfg"
+
 
 debug = not args.silent
 dev = args.interface
@@ -550,7 +554,7 @@ def std_A_qry(msg, prov_ip):
             #os.popen("python /yowsup/yowsup-cli -c /yowsup/config -s <number> \"Host %s\nIP %s\" > /dev/null &"%(id,prov_ip));
             handler_msg(host)
             save_req(LOGALERTFILE, 'Alert domain! ID: ' + host + '\n')
-            
+
             if host not in spoof:
                 DEBUGLOG('Responding with IP = ' + dominios[find_host])
                 rrset = dns.rrset.from_text(q.name, ttl, dns.rdataclass.IN, dns.rdatatype.A, dominios[find_host])
