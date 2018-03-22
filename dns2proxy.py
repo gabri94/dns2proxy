@@ -50,10 +50,13 @@ parser.add_argument("-I", "--ips", help="List of IPs to add after ip1,ip2 separa
 parser.add_argument("-S", "--silent", help="Silent mode", action="store_true")
 parser.add_argument("-A", "--adminIP", help="Administrator IP for no filtering", default="192.168.0.1")
 parser.add_argument("-p", "--directory", help="Use this option to specify the directory for the config files", default="")
+parser.add_argument("-o", "--output_to_file", help="Use this option to specify the directory for the config files", default="")
 
 args = parser.parse_args()
 
 DIR_PATH = args.directory
+if len(DIR_PATH)>0 and DIR_PATH[-1]!="/":
+    DIR_PATH += "/"
 
 LOGREQFILE = DIR_PATH + "dnslog.txt"
 LOGSNIFFFILE = DIR_PATH + "snifflog.txt"
