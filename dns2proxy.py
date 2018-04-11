@@ -1,4 +1,5 @@
 #!/usr/bin/python2.6
+# -*- coding: iso-8859-15 -*-
 '''
 dns2proxy for offensive cybersecurity v1.0
 
@@ -578,23 +579,46 @@ def std_A_qry(msg, prov_ip):
 
         ips = respuestas(qname.lower(), 'A')
         if qname.lower() not in spoof and isinstance(ips, numbers.Integral):
-        # SSLSTRIP2 transformation
-            punto = host.find(".")
-            dominio = host[punto:]
-            host2 = ''
-            if host[:5] == 'wwww.' or host[:7] == 'social.':
-                host2 = 'www%s' % dominio
-            elif host[:3] == 'web':
-                host2 = host[3:]
-            elif host[:7] == 'cuentas':
-                host2 = 'accounts%s' % dominio
-            elif host[:5] == 'gmail':
-                host2 = 'mail%s' % dominio
-            elif host == 'chatenabled.gmail.google.com':  # Yes, It is ugly....
-                host2 = 'chatenabled.mail.google.com'
-            if host2 != '':
-                DEBUGLOG('SSLStrip transforming host: %s => %s ...' % (host, host2))
-                ips = respuestas(host2, 'A')
+        # SSLSTRIP2 transformation using IDN HOMO
+            latin_cyrillic_match = {
+                'а': 'a',
+                'е': 'e',
+                'һ': 'h',
+                'і': 'i',
+                'ј': 'j',
+                'ӏ': 'l',
+                'о': 'o',
+                'р': 'p',
+                'г': 'r',
+                'ѕ': 's',
+                'ԝ': 'w',
+                'х': 'x',
+                'у': 'y'
+            }
+            n_url = ""
+            for symbol in qname.lower():
+                if(symbol in latin_cyrillic_match.keys()):
+                    n_url += latin_cyrillic_match[symbol]
+                else:
+                    n_url += symbol
+            print n_url
+            #
+            # punto = host.find(".")
+            # dominio = host[punto:]
+            # host2 = ''
+            # if host[:5] == 'wwww.' or host[:7] == 'social.':
+            #     host2 = 'www%s' % dominio
+            # elif host[:3] == 'web':
+            #     host2 = host[3:]
+            # elif host[:7] == 'cuentas':
+            #     host2 = 'accounts%s' % dominio
+            # elif host[:5] == 'gmail':
+            #     host2 = 'mail%s' % dominio
+            # elif host == 'chatenabled.gmail.google.com':  # Yes, It is ugly....
+            #     host2 = 'chatenabled.mail.google.com'
+            # if host2 != '':
+            #     DEBUGLOG('SSLStrip transforming host: %s => %s ...' % (host, host2))
+            #     ips = respuestas(host2, 'A')
 
         #print '>>> Victim: %s   Answer 0: %s'%(prov_ip,prov_resp)
 
