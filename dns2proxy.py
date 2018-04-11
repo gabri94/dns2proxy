@@ -580,6 +580,7 @@ def std_A_qry(msg, prov_ip):
         ips = respuestas(qname.lower(), 'A')
         if qname.lower() not in spoof and isinstance(ips, numbers.Integral):
         # SSLSTRIP2 transformation using IDN HOMO
+            host = qname.lower().decode('idna')
             latin_cyrillic_match = {
                 'а': 'a',
                 'е': 'e',
