@@ -297,14 +297,9 @@ def std_A_qry(msg, src_ip):
             # otherwise remove the string that you added ("web")
             #
             #
-            if host[:5] == 'wwww.':
-                real_domain = host[1:]
-            else:
-                real_domain = host[3:]
             #
             #
             # STOP EDITING HERE:
-
             # If the real domain exists return the answer to the client
             if real_domain != '':
                 DEBUGLOG('SSLStrip2 transforming host: %s => %s ...' % (host, real_domain))
